@@ -1,25 +1,30 @@
 # depslib dependency file v1.0
-1605137670 source:c:\users\win 10\desktop\syspac\login.c
+1605471180 source:c:\users\win 10\desktop\syspac\login.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"login.h"
 
-1605139989 source:c:\users\win 10\desktop\syspac\main.c
+1605471654 source:c:\users\win 10\desktop\syspac\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<ctype.h>
+	<unistd.h>
 	"paciente.h"
 	"login.h"
 
-1605140979 source:c:\users\win 10\desktop\syspac\paciente.c
+1605472127 source:c:\users\win 10\desktop\syspac\paciente.c
 	<stdio.h>
+	<string.h>
 	<stdlib.h>
 	<ctype.h>
 	<time.h>
 	"paciente.h"
 
-1605137765 c:\users\win 10\desktop\syspac\paciente.h
+1605471600 c:\users\win 10\desktop\syspac\paciente.h
 
-1605137646 c:\users\win 10\desktop\syspac\login.h
+1605471376 c:\users\win 10\desktop\syspac\login.h
+
+1605450862 source:c:\users\win 10\desktop\untitled1.c
 

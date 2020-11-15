@@ -31,20 +31,28 @@ static char*get_pass(char senha[]) {
 void registrar_usuario() {
     Usuario usuario;
 
-    printf("Registrar usuario:\n");
-    printf("Login:");
+    printf("\n\n\t  >> Registrar usuario:\n");
+    printf("\n\n\t  >> Login:");
     scanf("%s", &usuario.login[0]);
 
-    printf("Senha:");
+    printf("\n\n\t  >> Senha:");
     get_pass(&usuario.senha[0]);
 
     __registrar_usuario(&usuario);
 }
 
 
-int checar_usuario(char *login, char *senha) {
+int checar_usuario() {
     FILE *fp;
-    Usuario u;
+    char login[TAMLOGIN];
+    char senha[TAMSENHA];
+    Usuario usuario;
+
+    printf("Autenticar usuario:\n");
+    printf("Login:\n");
+    scanf("%s", &login[0]);
+    printf("Senha:\n");
+    scanf("%s", &senha[0]);
 
     fp = fopen(NOME_ARQ_USUARIO, "rb");
 
@@ -54,9 +62,9 @@ int checar_usuario(char *login, char *senha) {
     }
 
     while (!feof(fp)) {
-        fread(&u, sizeof(Usuario), 1, fp);
-        if (strncmp(&u.login[0], login, TAMLOGIN) == 0) {
-            if (strncmp(&u.senha[0], senha, TAMSENHA) == 0) {
+        fread(&usuario, sizeof(Usuario), 1, fp);
+        if (strncmp(&usuario.login[0], login, TAMLOGIN) == 0) {
+            if (strncmp(&usuario.senha[0], senha, TAMSENHA) == 0) {
                 return 1;
             }
         }

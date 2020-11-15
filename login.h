@@ -10,6 +10,7 @@ typedef struct usuario_struct {
     char senha[TAMSENHA];
 } Usuario;
 
-extern int checar_usuario(char* login, char* senha);
+extern int checar_usuario();
+extern void registrar_usuario();
 
 #endif // LOGIN_H_INCLUDED

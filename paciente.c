@@ -1,27 +1,12 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <time.h>
 
 #include "paciente.h"
 
-char *comorbidade_name[4] = {"DIABETES", "OBESIDADE", "HIPERTENSAO", "TUBERCULOSE"};
 
-void exemplo() {
-    enum comorbidade_enum coms[4] = {0, 1, 0, 0};
-    if (coms[OBESIDADE] == 1) {
-        printf("Paciente tem %s\n", comorbidade_name[DIABETES]);
-    }
-    if (coms[OBESIDADE] == 1) {
-        printf("Paciente tem %s\n", comorbidade_name[OBESIDADE]);
-    }
-    if (coms[OBESIDADE] == 1) {
-        printf("Paciente tem %s\n", comorbidade_name[HIPERTENSAO]);
-    }
-    if (coms[OBESIDADE] == 1) {
-        printf("Paciente tem %s\n", comorbidade_name[TUBERCULOSE]);
-    }
-}
 
 static void __gravar_paciente(Paciente *paciente) {
     FILE *fp;
@@ -56,118 +41,289 @@ void checar_grupo_risco(Paciente *paciente) {
 
 void gravar_paciente() {
     Paciente paciente;
+    char numstr[TAMNUM];
+    int ok=0, pos=0;
 
-        system("cls");
-        printf("\n |--------------------------------------------------------------------------------------------------------------------|");
-        printf("\n |                                             NOVO CADASTRO                                                          |");
-        printf("\n |--------------------------------------------------------------------------------------------------------------------|");
+    char c;
+
+    system("cls");
+    printf("\n |--------------------------------------------------------------------------------------------------------------------|");
+    printf("\n |                                             NOVO CADASTRO                                                          |");
+    printf("\n |--------------------------------------------------------------------------------------------------------------------|");
 
         printf("\n\n\tDados do paciente: ");
 
-        printf("Nome:");
-        fflush(stdin);
-        fgets(&paciente.nome[0], MAXNOME, stdin);
+            nome_label:
+            printf("Nome:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                paciente.nome[pos++] = c;
+                if (isdigit(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.nome[pos] = '\0';
+            if (!ok){
+                printf("numeros nao permitidos\n");
+                goto nome_label;
+            }
 
-        printf("CPF: (XXX.XXX.XXX-XX)");
-        fflush(stdin);
-        fgets(&paciente.cpf[0], TAMCPF, stdin);
+            cpf_label:
+            printf("CPF:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                paciente.cpf[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.cpf[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto cpf_label;
+            }
 
-        printf("\n\tTelefone: ");
-        fflush(stdin);
-        fgets(&paciente.telefone[0], TAMFONE, stdin);
+            telefone_label:
+            printf("Telefone:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                paciente.telefone[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.telefone[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto telefone_label;
+            }
 
-//        printf("\tE-mail: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]", &paciente.email);
-//
-//        system("cls");
-//        printf("\n\n\tData de Nascimento:");
-//
-//        printf("\t\tDia: ");
-//        fflush(stdin);
-//        scanf("%d[^\n]",paciente.aniversario.dia);
-//
-//        printf("\t\tMês: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.aniversario.mes);
-//
-//        printf("Ano de nascimento:");
-//        fflush(stdin);
-//        scanf("%d[^\n]", &paciente.aniversario.ano);
-//
-//        system("cls");
-//        printf("\n\n\tEndereço do Paciente:");
-//
-//        printf("\n\n\n\t\tLogradouro: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.endereco.logradouro);
-//
-//        printf("\t\tNúmero: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.endereco.numero);
-//
-//        printf("\t\tBairro: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.endereco.bairro);
-//
-//        printf("\t\tCidade: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.endereco.cidade);
-//
-//        printf("\t\tEstado: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.endereco.estado);
-//
-//        printf("\t\tCEP: ");
-//        fflush(stdin);
-//        scanf("%s[^\n]",paciente.endereco.cep);
-//
-//        system("cls");
-//        printf("\n\n\tData do diagnóstico: ");
-//
-//        printf("\n\n\n\t\tDia: ");
-//        fflush(stdin);
-//        scanf("%d[^\n]", &paciente.diagnostico.dia);
-//
-//        printf("\t\tMês: ");
-//        fflush(stdin);
-//        scanf("%d[^\n]", &paciente.diagnostico.mes);
-//
-//        printf("\t\tAno: ");
-//        fflush(stdin);
-//        scanf("%d[^\n]", &paciente.diagnostico.ano);
-//
-//        system("cls");
-//        printf("\n\tComorbidades:\n");
-//
-//        printf("Paciente  é diabético?");
-//        printf("[0] NÃO \n [1]SIM");
-//        fflush(stdin);
-//        scanf("%d", &paciente.comorbidades[DIABETES]);
-//
-//        printf("Paciente é obeso?)");
-//        printf("[0] NÃO \n [1]SIM");
-//        fflush(stdin);
-//        scanf("%d", &paciente.comorbidades[OBESIDADE]);
-//
-//        printf("Paciente  é hipertenso?");
-//        printf("[0] NÃO \n [1]SIM");
-//        fflush(stdin);
-//        scanf("%d", &paciente.comorbidades[HIPERTENSAO]);
-//
-//        printf("Paciente  possui tuberculose?");
-//        printf("[0] NÃO \n [1]SIM");
-//        fflush(stdin);
-//        scanf("%d", &paciente.comorbidades[TUBERCULOSE]);
-//
-//    __gravar_paciente(&paciente);
-//
-//    checar_grupo_risco(&paciente);
+
+            printf("\tE-mail: ");
+            fgets(&paciente.email[0],MAXNOME, stdin);
+
+            system("cls");
+            printf("\n\n\tEndereco do Paciente:");
+
+            logradouro_label:
+            printf("Logradouro:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                paciente.endereco.logradouro[pos++] = c;
+                if (isdigit(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.endereco.logradouro[pos] = '\0';
+            if (!ok){
+                printf("numeros nao permitidos\n");
+                goto logradouro_label;
+            }
+
+            numero_label:
+            printf("Numero:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                numstr[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto numero_label;
+            }
+            paciente.endereco.numero = atoi(numstr);
+
+            printf("\t\tComplemento: ");
+            fgets(&paciente.endereco.complemento[0], MAXNOME, stdin);
+
+            bairro_label:
+            printf("Bairro:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                paciente.endereco.bairro[pos++] = c;
+                if (isdigit(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.endereco.bairro[pos] = '\0';
+            if (!ok){
+                printf("numeros nao permitidos\n");
+                goto bairro_label;
+            }
+
+            cidade_label:
+            printf("Cidade:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                paciente.endereco.cidade[pos++] = c;
+                if (isdigit(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.endereco.cidade[pos] = '\0';
+            if (!ok){
+                printf("numeros nao permitidos\n");
+                goto cidade_label;
+            }
+
+            estado_label:
+            printf("Cidade:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+               paciente.endereco.estado[pos++] = c;
+                if (isdigit(c)) {
+                    ok = 0;
+                }
+            }
+            paciente.endereco.estado[pos] = '\0';
+            if (!ok){
+                printf("numeros nao permitidos\n");
+                goto estado_label;
+            }
+
+            system("cls");
+            printf("\n\n\tData de Nascimento:");
+
+           nascimento_dia_label:
+            printf("Dia:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                numstr[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto nascimento_dia_label;
+            }
+
+            nascimento_mes_label:
+            printf("Mes:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                numstr[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto nascimento_mes_label;
+            }
+
+            nascimento_ano_label:
+            printf("Ano:");
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+               numstr[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto nascimento_ano_label;
+            }
+
+            system("cls");
+            printf("\n\n\tData do diagnostico: ");
+
+            diagnostico_dia_label:
+            printf("Dia:");
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                numstr[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto diagnostico_dia_label;
+            }
+
+            diagnostico_mes_label:
+            printf("Mes:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                numstr[pos++] = c;
+                if (isalpha(c)) {
+                    ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto diagnostico_mes_label;
+            }
+
+            diagnostico_ano_label:
+            printf("Ano:");
+            ok = 1;
+            pos =0;
+            c = '\0';
+            while(c != '\n') {
+                c=getchar();
+                numstr[pos++] = c;
+                if (isalpha(c)) {
+                   ok = 0;
+                }
+            }
+            numstr[pos] = '\0';
+            if (!ok){
+                printf("Letras e caracteres nao permitidos\n");
+                goto diagnostico_ano_label;
+            }
+        __gravar_paciente(&paciente);
 }
 
-int buscar_paciente(char *cpf) {
+void buscar_paciente(Paciente *p, char *cpf) {
     FILE *fp;
-    Paciente p;
 
     fp = fopen(NOME_ARQ_PACIENTE, "rb");
 
@@ -177,9 +333,9 @@ int buscar_paciente(char *cpf) {
     }
 
     while (!feof(fp)) {
-        fread(&p, sizeof(Paciente), 1, fp);
-        if (strncpy(cpf, p.cpf, TAMCPF) == 0) {
-           return &p;
+        fread(p, sizeof(Paciente), 1, fp);
+        if (strncpy(cpf, p->cpf, TAMCPF) == 0) {
+           return;
         }
     }
     fclose(fp);
@@ -187,3 +343,5 @@ int buscar_paciente(char *cpf) {
     fprintf(stderr, "O paciente com CPF %s nao existe!\n", cpf);
     exit(1);
 }
+
+
