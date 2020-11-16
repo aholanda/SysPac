@@ -5,7 +5,6 @@
 #include <unistd.h>
 
 #include "login.h"
-#include "password.h"
 
 static void flush_buffer() {
     char ch;
