@@ -6,13 +6,9 @@
 
 #include "paciente.h"
 #include "login.h"
-
-void menu_pacientes(){
-        char cpf[TAMCPF];
-        Paciente paciente;
-        int op;
-        do{
-            system("cls");
+ 
+int print_menu_paciente() {
+  int op; 
             printf("\n |---------------------------------------------------------------------------------------------------|");
             printf("\n |                         CADASTRO PACIENTES DIAGNOSTICADOS COM SARS-COV-2                          |");
             printf("\n |---------------------------------------------------------------------------------------------------|");
@@ -23,9 +19,22 @@ void menu_pacientes(){
             printf("\n |                                                                                                   |");
             printf("\n |___________________________________________________________________________________________________|");
 
-            printf("\n\n\t  >> Selecione uma opcao:  ");
-            scanf("%i", &op);
+            
+  
+      printf("\n\n\t  >> Selecione uma opcao:  ");
+      scanf("%d", &op);
 
+      return op;
+
+}
+
+void menu_pacientes(){
+        char cpf[TAMCPF];
+        Paciente paciente;
+        int op=-1;
+        
+        do{
+           op =print_menu_paciente();
             switch(op){
                 case 1:
                     printf("\n\t  >> Opcao selecionada: 1 - Novo Cadastro");
@@ -45,13 +54,11 @@ void menu_pacientes(){
                     printf("\n\n\t  >> Opcao invalida");
             }
         }while(op != 3);
-
 }
 
-void menu_login(){
-        int op, ok=0;
-        do{
-            system("cls");
+int print_menu_login () {
+  int op;
+
             printf("\n |---------------------------------------------------------------------------------------------------|");
             printf("\n |                                     SISTEMA CADASTRO COVID-19                                     |");
             printf("\n |---------------------------------------------------------------------------------------------------|");
@@ -64,29 +71,37 @@ void menu_login(){
 
             printf("\n\n\t  >> Selecione uma opcao:  ");
             scanf("%d", &op);
+    return op;
+}
 
-            switch(op){
-                case 1:
-                    printf("\n\t  >> Opcao selecionada: 1 - Novo Cadastro");
-                    registrar_usuario();
-                    ok = 1;
-                break;
-                case 2:
-                    printf("\n\t  >> Opcao selecionada: 2 - Acesso ao menu");
-                    printf("\n\t  >> Realizar login: \n");
-                    checar_usuario();
-                break;
-                case 3:
-                    printf("\n\t  >> Opcao selecionada: 3 - Encerrar o Programa");
-                    exit(0);
-                break;
-                default:
-                    printf("\n\t  >> Opcao invalida");
-                    break;
+
+void menu_login(){
+        int op=-1, ok=0;
+        Usuario usuario;
+
+        do {
+          op =print_menu_login();
+
+          switch(op){
+            case 1:
+              printf("\n\t  >> Opcao 1 - Novo Cadastro");
+              registrar_usuario(&usuario);
+              ok = 1;
+              break;
+            case 2:
+              printf("\n\t  >> Opcao 2 - Acesso ao menu");
+              printf("\n\t  >> Realizar login: \n");
+              checar_usuario();
+              break;
+            case 3:
+              printf("\n\t  >> Opcao 3 - Encerrar o Programa");
+              exit(0);
+              break;
+              default:
+              printf("\n\t  >> Opcao invalida");
+              break;
             }
-
-        } while(op != 3 || ok != 1);
-
+        } while(ok != 1);
 }
 
 int main(int argc, char**argv) {

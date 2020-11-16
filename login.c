@@ -4,6 +4,12 @@
 
 #include "login.h"
 
+static void flush_buffer() {
+    char ch;
+    while ((ch = getchar() != '\n') && (ch != EOF));
+}
+
+
 static void __registrar_usuario(Usuario *usuario) {
     FILE *fp;
 
@@ -17,37 +23,41 @@ static void __registrar_usuario(Usuario *usuario) {
     fclose(fp);
 }
 
-static char*get_pass(char senha[]) {
-    int pos=0;
-    int c;
-
-    while((c=getc(stdin))!='\n'){
-        printf("%c", c);
-        senha[pos++]=c;
-        putchar('*');
-    }
-    return &senha[0];
-}
-void registrar_usuario() {
-    Usuario usuario;
+void registrar_usuario(Usuario *usuario) {
+    char c='\0';
+    int continua=1;
+    int i, pos=0;
 
     printf("\n\n\t  >> Registrar usuario:\n");
     printf("\n\n\t  >> Login:");
-    scanf("%s", &usuario.login[0]);
+    scanf("%s", usuario->login);
+    
+    flush_buffer();
+    
+    while (continua) {
+      fflush(stdin);
+      printf("\n\t  >> Senha:");
+      for (i=0; i<pos; i++)
+        printf("*"); 
+      c=fgetc(stdin);
+      usuario->senha[pos++]=c;
+      if (c == '\n') {
+        continua = 0;
+        usuario->senha[pos] = '\0';
+      } 
+    } 
+  
+    printf("\n%s\n",usuario->senha);
 
-    printf("\n\n\t  >> Senha:");
-    get_pass(&usuario.senha[0]);
-
-    __registrar_usuario(&usuario);
+    __registrar_usuario(usuario);
 }
-
 
 int checar_usuario() {
     FILE *fp;
     char login[TAMLOGIN];
     char senha[TAMSENHA];
     Usuario usuario;
-
+  
     printf("Autenticar usuario:\n");
     printf("Login:\n");
     scanf("%s", &login[0]);
@@ -72,3 +82,4 @@ int checar_usuario() {
     fclose(fp);
     return 0;
 }
+

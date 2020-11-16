@@ -11,6 +11,6 @@ typedef struct usuario_struct {
 } Usuario;
 
 extern int checar_usuario();
-extern void registrar_usuario();
+extern void registrar_usuario(Usuario *usuario);
 
 #endif // LOGIN_H_INCLUDED
