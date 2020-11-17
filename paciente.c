@@ -5,7 +5,7 @@
 #include <time.h>
 
 #include "paciente.h"
-
+#include "login.h"
 
 
 static void __gravar_paciente(Paciente *paciente) {
@@ -72,6 +72,7 @@ void gravar_paciente() {
             }
 
             cpf_label:
+            flush_buffer();
             printf("CPF:");
             ok = 1;
             pos =0;
@@ -90,6 +91,7 @@ void gravar_paciente() {
             }
 
             telefone_label:
+            flush_buffer();
             printf("Telefone:");
             ok = 1;
             pos =0;
@@ -109,12 +111,12 @@ void gravar_paciente() {
 
 
             printf("\tE-mail: ");
+            flush_buffer();
             fgets(&paciente.email[0],MAXNOME, stdin);
 
-            system("cls");
             printf("\n\n\tEndereco do Paciente:");
-
             logradouro_label:
+            flush_buffer();
             printf("Logradouro:");
             ok = 1;
             pos =0;
@@ -133,6 +135,7 @@ void gravar_paciente() {
             }
 
             numero_label:
+            flush_buffer();
             printf("Numero:");
             ok = 1;
             pos =0;
@@ -155,6 +158,7 @@ void gravar_paciente() {
             fgets(&paciente.endereco.complemento[0], MAXNOME, stdin);
 
             bairro_label:
+            flush_buffer();
             printf("Bairro:");
             ok = 1;
             pos =0;
@@ -173,6 +177,7 @@ void gravar_paciente() {
             }
 
             cidade_label:
+            flush_buffer();
             printf("Cidade:");
             ok = 1;
             pos =0;
@@ -191,6 +196,7 @@ void gravar_paciente() {
             }
 
             estado_label:
+            flush_buffer();
             printf("Cidade:");
             ok = 1;
             pos =0;
@@ -207,11 +213,10 @@ void gravar_paciente() {
                 printf("numeros nao permitidos\n");
                 goto estado_label;
             }
-
-            system("cls");
             printf("\n\n\tData de Nascimento:");
 
            nascimento_dia_label:
+            flush_buffer();
             printf("Dia:");
             ok = 1;
             pos =0;
@@ -230,6 +235,7 @@ void gravar_paciente() {
             }
 
             nascimento_mes_label:
+            flush_buffer();
             printf("Mes:");
             ok = 1;
             pos =0;
@@ -248,6 +254,7 @@ void gravar_paciente() {
             }
 
             nascimento_ano_label:
+            flush_buffer();
             printf("Ano:");
             pos =0;
             c = '\0';
@@ -263,11 +270,10 @@ void gravar_paciente() {
                 printf("Letras e caracteres nao permitidos\n");
                 goto nascimento_ano_label;
             }
-
-            system("cls");
             printf("\n\n\tData do diagnostico: ");
 
             diagnostico_dia_label:
+            flush_buffer();
             printf("Dia:");
             pos =0;
             c = '\0';
@@ -285,6 +291,7 @@ void gravar_paciente() {
             }
 
             diagnostico_mes_label:
+            flush_buffer();            
             printf("Mes:");
             ok = 1;
             pos =0;
@@ -303,6 +310,7 @@ void gravar_paciente() {
             }
 
             diagnostico_ano_label:
+            flush_buffer();            
             printf("Ano:");
             ok = 1;
             pos =0;

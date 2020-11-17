@@ -6,11 +6,6 @@
 
 #include "login.h"
 
-static void flush_buffer() {
-    char ch;
-    while ((ch = getchar() != '\n') && (ch != EOF));
-}
-
 int getch() {
     struct termios oldtc, newtc;
     int ch;

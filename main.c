@@ -41,10 +41,12 @@ void menu_pacientes(){
                     gravar_paciente();
                 break;
                 case 2:
+                    flush_buffer();
                     printf("Opcao selecionada: 2 - Buscar Cadastro\n");
                     printf("\n\t  >> Informe o CPF:");
                     fgets(&cpf[0], TAMCPF, stdin);
                     buscar_paciente(&paciente, &cpf[0]);
+                    printf("Achou o louco do %s com CPF %s\n", paciente.nome, paciente.cpf);
                 break;
                 case 3:
                     printf("\n\t  >> Opcao selecionada: 3 - Encerrar o Programa");
@@ -105,8 +107,8 @@ void menu_login(){
 }
 
 int main(int argc, char**argv) {
-	menu_login();
+	//menu_login();
 
-    //menu_pacientes();
+  menu_pacientes();
 
 }
