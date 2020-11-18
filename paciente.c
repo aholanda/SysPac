@@ -29,9 +29,9 @@ void checar_grupo_risco(Paciente *paciente) {
     struct tm tm = *localtime(&t);
     int idade = 1900 +  tm.tm_year;
     int dif = idade - paciente->aniversario.ano;
-
-    printf("%d\n", dif);
+    
     if (dif > 65) {
+        printf("Cuidado veio, voce tem %d, fica na goma\n", dif);
         FILE *fp = fopen(NOME_ARQ_RISCO, "w");
         if (fp == NULL) {
             fprintf(stderr, "Erro ao abrir %s para escrita\n", NOME_ARQ_RISCO);
