@@ -7,29 +7,29 @@
 #include "paciente.h"
 #include "login.h"
  
+#define SELECT_MARK "*"
+
 int print_menu_paciente() {
   int op; 
-            printf("\n |---------------------------------------------------------------------------------------------------|");
-            printf("\n |                         CADASTRO PACIENTES DIAGNOSTICADOS COM SARS-COV-2                          |");
-            printf("\n |---------------------------------------------------------------------------------------------------|");
-            printf("\n |                                                                                                   |");
-            printf("\n |   [1] Novo Cadastro           	                                                                   |");
-            printf("\n |   [2] Buscar Paciente                                                                             |");
-            printf("\n |   [3] Encerrar o Programa                                                                         |");
-            printf("\n |                                                                                                   |");
-            printf("\n |___________________________________________________________________________________________________|");
+  printf("|--------------------------------------------------------------|\n");
+  printf("|      CADASTRO PACIENTES DIAGNOSTICADOS COM SARS-COV-2        |\n");
+  printf("|--------------------------------------------------------------|\n");
+  printf("|                                                              |\n");
+  printf("|   [1] Novo Cadastro           	                             |\n");
+  printf("|   [2] Buscar Paciente                                        |\n");
+  printf("|   [3] Encerrar o Programa                                    |\n");
+  printf("|                                                              |\n");
+  printf("|______________________________________________________________|\n");
 
             
   
-      printf("\n\n\t  >> Selecione uma opcao:  ");
-      scanf("%d", &op);
+  printf("\n%s Selecione uma opcao: ", SELECT_MARK);
+  scanf("%d", &op);
 
-      return op;
-
+  return op;
 }
 
 void menu_pacientes(){
-        char cpf[TAMCPF];
         Paciente paciente;
         int op=-1;
         
@@ -41,11 +41,8 @@ void menu_pacientes(){
                     gravar_paciente();
                 break;
                 case 2:
-                    flush_buffer();
-                    printf("Opcao selecionada: 2 - Buscar Cadastro\n");
-                    printf("\n\t  >> Informe o CPF:");
-                    fgets(&cpf[0], TAMCPF, stdin);
-                    buscar_paciente(&paciente, &cpf[0]);
+                    flush_buffer();                    
+                    buscar_paciente(&paciente);
                     printf("Achou o louco do %s com CPF %s\n", paciente.nome, paciente.cpf);
                 break;
                 case 3:
@@ -61,19 +58,19 @@ void menu_pacientes(){
 int print_menu_login () {
   int op;
 
-            printf("\n |---------------------------------------------------------------------------------------------------|");
-            printf("\n |                                     SISTEMA CADASTRO COVID-19                                     |");
-            printf("\n |---------------------------------------------------------------------------------------------------|");
-            printf("\n |                                                                                                   |");
-            printf("\n |   [1] Cadastrar Novo Usuario                                                                      |");
-            printf("\n |   [2] Acessar Menu Principal                                                                      |");
-            printf("\n |   [3] Encerrar o Programa                                                                         |");
-            printf("\n |                                                                                                   |");
-            printf("\n |___________________________________________________________________________________________________|");
+  printf("|---------------------------------------------------------------------|\n");
+  printf("|       SISTEMA CADASTRO COVID-19                                     |\n");
+  printf("|---------------------------------------------------------------------|\n");
+  printf("|                                                                     |\n");
+  printf("|   [1] Cadastrar Novo Usuario                                        |\n");
+  printf("|   [2] Acessar Menu Principal                                        |\n");
+  printf("|   [3] Encerrar o Programa                                           |\n");
+  printf("|                                                                     |\n");
+  printf("|_____________________________________________________________________|\n");
 
-            printf("\n\n\t  >> Selecione uma opcao:  ");
-            scanf("%d", &op);
-    return op;
+  printf("* Selecione uma opcao: ");
+  scanf("%d", &op);
+  return op;
 }
 
 

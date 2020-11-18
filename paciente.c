@@ -7,6 +7,8 @@
 #include "paciente.h"
 #include "login.h"
 
+#define INIT_MARK "#"
+#define ENTER_MARK ">"
 
 static void __gravar_paciente(Paciente *paciente) {
     FILE *fp;
@@ -20,6 +22,10 @@ static void __gravar_paciente(Paciente *paciente) {
     fwrite(paciente, sizeof(Paciente), 1, fp);
 
     fclose(fp);
+
+    print_paciente(paciente);
+
+    exit(EXIT_SUCCESS);
 }
 
 void checar_grupo_risco(Paciente *paciente) {
@@ -42,314 +48,319 @@ void checar_grupo_risco(Paciente *paciente) {
 void gravar_paciente() {
     Paciente paciente;
     char numstr[TAMNUM];
-    int ok=0, pos=0;
+    int i;
 
-    char c;
+    printf("|--------------------------------------------------------------------------|\n");
+    printf("|                            NOVO CADASTRO                                 |\n");
+    printf("|--------------------------------------------------------------------------|\n");
 
-    system("cls");
-    printf("\n |--------------------------------------------------------------------------------------------------------------------|");
-    printf("\n |                                             NOVO CADASTRO                                                          |");
-    printf("\n |--------------------------------------------------------------------------------------------------------------------|");
-
-        printf("\n\n\tDados do paciente: ");
-
-            nome_label:
-            printf("Nome:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                paciente.nome[pos++] = c;
-                if (isdigit(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.nome[pos] = '\0';
-            if (!ok){
-                printf("numeros nao permitidos\n");
-                goto nome_label;
-            }
-
-            cpf_label:
+    printf("%s Dados do paciente: \n", INIT_MARK);
+            
+    /* NOME */
+    nome_label:
+    flush_buffer();
+    printf("%s Nome: ", ENTER_MARK);
+    fflush(stdin);            
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.nome[i] = getc(stdin);
+        if (paciente.nome[i] == '\n') {
+            paciente.nome[i] = '\0';
+            break;
+        }
+        if (isdigit(paciente.nome[i])) {
+            fprintf(stderr, "So letras por favor, senao fico brava!\n");
             flush_buffer();
-            printf("CPF:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                paciente.cpf[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.cpf[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto cpf_label;
-            }
-
-            telefone_label:
+            goto nome_label;
+        }
+    }
+    
+    /* CPF */
+    cpf_label:
+    printf("%s CPF: ", ENTER_MARK);
+    fflush(stdin);
+    for (i = 0; i < TAMCPF; i++) {
+        paciente.cpf[i] = getc(stdin);
+        if (paciente.cpf[i] == '\n') {
+            paciente.cpf[i] = '\0';
+            break;
+        }
+        if (isalpha(paciente.cpf[i])) {
+            printf("Eh permitido somente numeros, \".\" e \"-\"\n");
             flush_buffer();
-            printf("Telefone:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                paciente.telefone[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.telefone[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto telefone_label;
-            }
+            goto cpf_label;
+        }
+    }
 
-
-            printf("\tE-mail: ");
+    telefone_label:
+    printf("%s Telefone: ", ENTER_MARK);
+    fflush(stdin);
+    for (i = 0; i < TAMFONE; i++) {
+        paciente.telefone[i] = getc(stdin);
+        if (paciente.telefone[i] == '\n') {
+            paciente.telefone[i] = '\0';
+            break;
+        }
+        if (isalpha(paciente.telefone[i])) {
+            printf("Letras e caracteres nao permitidos\n");
             flush_buffer();
-            fgets(&paciente.email[0],MAXNOME, stdin);
+            goto telefone_label;
+        }
+    }
 
-            printf("\n\n\tEndereco do Paciente:");
-            logradouro_label:
+   /* EMAIL */
+    printf("%s E-mail: ", ENTER_MARK);
+    fflush(stdin);
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.email[i] = getc(stdin);
+        if (paciente.email[i] == '\n') {
+            paciente.email[i] = '\0';
+            break;
+        }
+    }
+
+    logradouro_label:
+    printf("%s Endereco do Paciente: \n", INIT_MARK);
+    printf("%s Logradouro: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.endereco.logradouro[i] = getc(stdin);
+        if (paciente.endereco.logradouro[i] == '\n') {
+            paciente.endereco.logradouro[i] = '\0';
+            break;
+        }
+        if (isdigit(paciente.endereco.logradouro[i])) {
+            printf("numeros nao permitidos\n");
             flush_buffer();
-            printf("Logradouro:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                paciente.endereco.logradouro[pos++] = c;
-                if (isdigit(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.endereco.logradouro[pos] = '\0';
-            if (!ok){
-                printf("numeros nao permitidos\n");
-                goto logradouro_label;
-            }
+            goto logradouro_label;
+        }
+    }
 
-            numero_label:
+    numero_label:
+    printf("%s Numero: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < TAMNUM; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Numero:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                numstr[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto numero_label;
-            }
-            paciente.endereco.numero = atoi(numstr);
+            goto numero_label;
+        }
+    }
+    paciente.endereco.numero = atoi(numstr);
 
-            printf("\t\tComplemento: ");
-            fgets(&paciente.endereco.complemento[0], MAXNOME, stdin);
-
-            bairro_label:
+    /* COMPLEMENTO */
+    printf("%s Complemento: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.endereco.complemento[i] = getc(stdin);
+        if (paciente.endereco.complemento[i] == '\n') {
+            paciente.endereco.complemento[i] = '\0';
+            break;
+        }
+    }
+ 
+    //bairro_label:
+    printf("%s Bairro: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.endereco.bairro[i] = getc(stdin);
+        if (paciente.endereco.bairro[i] == '\n') {
+            paciente.endereco.bairro[i] = '\0';
+            break;
+        }
+    }
+    
+    //cidade_label:    
+    printf("%s Cidade: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.endereco.cidade[i] = getc(stdin);
+        if (paciente.endereco.cidade[i] == '\n') {
+            paciente.endereco.cidade[i] = '\0';
+            break;
+        }
+    }
+            
+    estado_label:
+    printf("%s Estado: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < MAXNOME; i++) {
+        paciente.endereco.estado[i] = getc(stdin);
+        if (paciente.endereco.estado[i] == '\n') {
+            paciente.endereco.estado[i] = '\0';
+            break;
+        }
+        if (isdigit(paciente.endereco.estado[i])) {
+            printf("numeros nao permitidos\n");
             flush_buffer();
-            printf("Bairro:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                paciente.endereco.bairro[pos++] = c;
-                if (isdigit(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.endereco.bairro[pos] = '\0';
-            if (!ok){
-                printf("numeros nao permitidos\n");
-                goto bairro_label;
-            }
+            goto estado_label;
+        }
+    }
 
-            cidade_label:
+    printf("%s Data de nascimento: ", INIT_MARK);       
+    nascimento_dia_label:
+    printf("%s Dia:", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < 2; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Cidade:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                paciente.endereco.cidade[pos++] = c;
-                if (isdigit(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.endereco.cidade[pos] = '\0';
-            if (!ok){
-                printf("numeros nao permitidos\n");
-                goto cidade_label;
-            }
+            goto nascimento_dia_label;
+        }
+    }
+    paciente.aniversario.dia = atoi(numstr);
 
-            estado_label:
+    nascimento_mes_label:
+    printf("%s Mes: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < 2; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Cidade:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-               paciente.endereco.estado[pos++] = c;
-                if (isdigit(c)) {
-                    ok = 0;
-                }
-            }
-            paciente.endereco.estado[pos] = '\0';
-            if (!ok){
-                printf("numeros nao permitidos\n");
-                goto estado_label;
-            }
-            printf("\n\n\tData de Nascimento:");
+            goto nascimento_mes_label;
+        }
+    }
+    paciente.aniversario.mes = atoi(numstr);
 
-           nascimento_dia_label:
+    nascimento_ano_label:
+    flush_buffer();
+    printf("%s Ano: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < 4; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Dia:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                numstr[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto nascimento_dia_label;
-            }
+            goto nascimento_ano_label;
+        }
+    }
+    paciente.aniversario.ano = atoi(numstr);
 
-            nascimento_mes_label:
+    printf("%s Data do diagnostico: ", INIT_MARK);
+    diagnostico_dia_label:
+    flush_buffer();    
+    printf("Dia:");
+    fflush(stdin);        
+    for (i = 0; i < 2; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Mes:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                numstr[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto nascimento_mes_label;
-            }
+            goto diagnostico_dia_label;
+        }
+    }
+    paciente.diagnostico.dia = atoi(numstr);
 
-            nascimento_ano_label:
+    diagnostico_mes_label:
+    printf("%s Mes: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < 2; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Ano:");
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-               numstr[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto nascimento_ano_label;
-            }
-            printf("\n\n\tData do diagnostico: ");
+            goto diagnostico_mes_label;
+        }
+    }
+    paciente.diagnostico.mes = atoi(numstr);
 
-            diagnostico_dia_label:
+    diagnostico_ano_label:
+    flush_buffer();    
+    printf("%s Ano: ", ENTER_MARK);
+    fflush(stdin);        
+    for (i = 0; i < 4; i++) {
+        numstr[i] = getc(stdin);
+        if (numstr[i] == '\n') {
+            numstr[i] = '\0';
+            break;
+        }
+        if (!isdigit(numstr[i])) {
+            printf("soh numeros nao permitidos\n");
             flush_buffer();
-            printf("Dia:");
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                numstr[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto diagnostico_dia_label;
-            }
+            goto diagnostico_ano_label;
+        }
+    }
+    paciente.diagnostico.ano = atoi(numstr);
 
-            diagnostico_mes_label:
-            flush_buffer();            
-            printf("Mes:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                numstr[pos++] = c;
-                if (isalpha(c)) {
-                    ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto diagnostico_mes_label;
-            }
-
-            diagnostico_ano_label:
-            flush_buffer();            
-            printf("Ano:");
-            ok = 1;
-            pos =0;
-            c = '\0';
-            while(c != '\n') {
-                c=getchar();
-                numstr[pos++] = c;
-                if (isalpha(c)) {
-                   ok = 0;
-                }
-            }
-            numstr[pos] = '\0';
-            if (!ok){
-                printf("Letras e caracteres nao permitidos\n");
-                goto diagnostico_ano_label;
-            }
-        __gravar_paciente(&paciente);
+    __gravar_paciente(&paciente);
 }
 
-void buscar_paciente(Paciente *p, char *cpf) {
+ void print_paciente(Paciente *p) {
+    printf("ACHEI PACIENTE, MAS MESMO ASSIM ESTOU BRAVA\n");
+    printf("Nome: %s\n", p->nome);
+    printf("CPF: %s\n", p->cpf);
+    printf("Telefone: %s\n", p->telefone);
+    printf("Email: %s\n", p->email);
+    printf("Logradouro: %s\n", p->endereco.logradouro);
+    printf("Numero: %d\n", p->endereco.numero);
+    printf("Complemento: %s\n", p->endereco.complemento);
+    printf("Bairro: %s\n", p->endereco.bairro);
+    printf("Cidade: %s\n", p->endereco.cidade);
+    printf("Estado: %s\n", p->endereco.estado);
+    printf("Nascimento: %d/%d/%d\n", 
+            p->aniversario.dia, 
+            p->aniversario.mes, 
+            p->aniversario.ano);
+    printf("Data diagnostica: %d/%d/%d\n", 
+            p->diagnostico.dia, 
+            p->diagnostico.mes, 
+            p->diagnostico.ano);
+}
+
+void buscar_paciente(Paciente *p) {
     FILE *fp;
+    char cpf[TAMCPF];
+
+    printf("%s Buscar Paciente\n", INIT_MARK);
+    printf("%s Informe o CPF: ", ENTER_MARK);
+    fgets(&cpf[0], TAMCPF, stdin);
+    /* remove nova linha */
+    cpf[strlen(cpf)] = '\0';
 
     fp = fopen(NOME_ARQ_PACIENTE, "rb");
 
     if (fp == NULL) {
         fprintf(stderr, "Erro ao abrir %s para leitura!\n", NOME_ARQ_PACIENTE);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     while (!feof(fp)) {
         fread(p, sizeof(Paciente), 1, fp);
-        if (strncpy(cpf, p->cpf, TAMCPF) == 0) {
-           return;
+        if (strncmp(cpf, p->cpf, strlen(p->cpf)) == 0) {
+            print_paciente(p);
+            exit(EXIT_SUCCESS);
         }
     }
     fclose(fp);
 
     fprintf(stderr, "O paciente com CPF %s nao existe!\n", cpf);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 

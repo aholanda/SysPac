@@ -41,5 +41,6 @@ enum comorbidade_enum {DIABETES=0, OBESIDADE, HIPERTENSAO, TUBERCULOSE};
 
 
 extern void gravar_paciente();
-extern void buscar_paciente(Paciente *p, char *cpf);
+extern void buscar_paciente(Paciente *p);
+extern void print_paciente(Paciente *p);
 #endif // PACIENTE_H
