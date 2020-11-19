@@ -3,9 +3,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <time.h>
+#include <unistd.h>
+#include <termios.h>
 
 #include "paciente.h"
 #include "login.h"
+#include "io.h"
 
 #define INIT_MARK "#"
 #define ENTER_MARK ">"
@@ -32,7 +35,7 @@ void checar_grupo_risco(Paciente *paciente) {
     
     if (dif > 65) {
         printf("Cuidado veio, voce tem %d, fica na goma\n", dif);
-        FILE *fp = fopen(NOME_ARQ_RISCO, "w");
+        FILE *fp = fopen(NOME_ARQ_RISCO, "aw");
         if (fp == NULL) {
             fprintf(stderr, "Erro ao abrir %s para escrita\n", NOME_ARQ_RISCO);
             exit(EXIT_FAILURE);
@@ -219,9 +222,9 @@ void gravar_paciente() {
 
     printf("%s Data de nascimento\n", INIT_MARK);       
     nascimento_dia_label:
-    printf("%s Dia:", ENTER_MARK);
+    printf("%s Dia: ", ENTER_MARK);
     fflush(stdin);        
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
             numstr[i] = '\0';
@@ -238,7 +241,7 @@ void gravar_paciente() {
     nascimento_mes_label:
     printf("%s Mes: ", ENTER_MARK);
     fflush(stdin);        
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
             numstr[i] = '\0';
@@ -255,7 +258,7 @@ void gravar_paciente() {
     nascimento_ano_label:
     printf("%s Ano: ", ENTER_MARK);
     fflush(stdin);        
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 5; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
             numstr[i] = '\0';
@@ -271,10 +274,9 @@ void gravar_paciente() {
 
     printf("%s Data do diagnostico\n", INIT_MARK);
     diagnostico_dia_label:
-    flush_buffer();
     printf("%s Dia: ", ENTER_MARK);
     fflush(stdin);        
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
             numstr[i] = '\0';
@@ -291,7 +293,7 @@ void gravar_paciente() {
     diagnostico_mes_label:
     printf("%s Mes: ", ENTER_MARK);
     fflush(stdin);        
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
             numstr[i] = '\0';
@@ -308,7 +310,7 @@ void gravar_paciente() {
     diagnostico_ano_label:
     printf("%s Ano: ", ENTER_MARK);
     fflush(stdin);        
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 5; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
             numstr[i] = '\0';
@@ -352,12 +354,22 @@ void gravar_paciente() {
 void buscar_paciente(Paciente *p) {
     FILE *fp;
     char cpf[TAMCPF];
+    int i;
 
+    flush_buffer();
     printf("%s Buscar Paciente\n", INIT_MARK);
     printf("%s Informe o CPF: ", ENTER_MARK);
-    fgets(&cpf[0], TAMCPF, stdin);
-    /* remove nova linha */
-    cpf[strlen(cpf)] = '\0';
+    fflush(stdin);
+    for (i = 0; i < TAMCPF; i++) {
+        cpf[i] = getc(stdin);
+        
+        if (cpf[i] == '\n' || cpf[i]== '\t') {
+            cpf[i] = '\0';
+            break;
+        }
+    }
+
+    printf("CPF: %s", cpf);
 
     fp = fopen(NOME_ARQ_PACIENTE, "rb");
 
@@ -369,6 +381,7 @@ void buscar_paciente(Paciente *p) {
     while (!feof(fp)) {
         fread(p, sizeof(Paciente), 1, fp);
         if (strncmp(cpf, p->cpf, strlen(p->cpf)) == 0) {
+            printf("%s\n", p->cpf);
             print_paciente(p);
             exit(EXIT_SUCCESS);
         }
