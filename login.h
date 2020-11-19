@@ -13,9 +13,4 @@ typedef struct usuario_struct {
 extern int checar_usuario();
 extern void registrar_usuario(Usuario *usuario);
 
-static void flush_buffer() {
-    char ch;
-    while ((ch = getchar() != '\n') && (ch != EOF));
-}
-
 #endif // LOGIN_H_INCLUDED

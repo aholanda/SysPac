@@ -1,22 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <termios.h>
 #include <unistd.h>
 
 #include "login.h"
+#include "io.h"
 
-int getch() {
-    struct termios oldtc, newtc;
-    int ch;
-    tcgetattr(STDIN_FILENO, &oldtc);
-    newtc = oldtc;
-    newtc.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newtc);
-    ch=getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldtc);
-    return ch;
-}
+#define WARN_MARK "#"
+#define ENTER_MARK ">"
+
+/* Main control chars definition */
+#define  ENTER 13
+#define TAB 9
+#define BKSP 8 /* espaco */
 
 static void __registrar_usuario(Usuario *usuario) {
     FILE *fp;
@@ -32,48 +28,83 @@ static void __registrar_usuario(Usuario *usuario) {
 }
 
 void registrar_usuario(Usuario *usuario) {
-    char senha[MAXPW] = {0};
-    char ch = '\0';
-    int i=0;
+    int i;
+    char ch;
 
-    printf("\n\n\t  >> Registrar usuario:\n");
-    printf("\n\n\t  >> Login:");
-    scanf("%s", usuario->login);
     flush_buffer();
-
-    printf("\n\n\t Digite a senha e");
-    printf("tecle Enter para sair.\n\n");
-
-    for (;;) {
-        ch = getch();
-        senha[i++] = ch;
-        printf("*");
-        if(ch == '\n') {
-            i--;
-            senha[i] = '\0';
+    printf("%s Registrar usuario:\n", WARN_MARK);
+    printf("%s Login: ", ENTER_MARK);
+    fflush(stdin);
+    for (i = 0; i < MAXLOGIN; i++) {
+        usuario->login[i] = getc(stdin);
+        if (usuario->login[i] == '\n') {
+            usuario->login[i] = '\0';
             break;
         }
     }
-  
-    printf("\n%s\n", senha);
 
-    strncpy(usuario->senha, senha, MAXPW);
+    printf("%s Senha: ", ENTER_MARK);
+    fflush(stdin);
+    system ("/bin/stty raw");    
+    for (i = 0; i < MAXPW; i++) {    
+        ch = getch();
+
+        if(ch == ENTER || ch == TAB) {
+            usuario->senha[i] = '\0';
+            break;
+        } else if (ch == BKSP) {
+            i--;
+            printf("\b \b");
+        } else {
+            usuario->senha[i] = ch;
+            printf("* \b");
+        }
+    }
+    system ("/bin/stty cooked");    
+    
+    printf("\n%s\n", usuario->senha);
 
     __registrar_usuario(usuario);
 }
 
 int checar_usuario() {
     FILE *fp;
-    char login[MAXLOGIN];
+    char ch, login[MAXLOGIN];
     char senha[MAXPW];
     Usuario usuario;
+    int i;
   
-    printf("Autenticar usuario:\n");
-    printf("Login:\n");
-    scanf("%s", &login[0]);
-    printf("Senha:\n");
-    scanf("%s", &senha[0]);
+    flush_buffer();
+    printf("%s Autenticacao do usuario:\n", WARN_MARK);
+    printf("%s Login: ", ENTER_MARK);
+    fflush(stdin);
+    for (i = 0; i < MAXLOGIN; i++) {
+        login[i] = getc(stdin);
+        if (login[i] == '\n') {
+            login[i] = '\0';
+            break;
+        }
+    }
 
+    printf("%s Senha: ", ENTER_MARK);
+    fflush(stdin);
+    system ("/bin/stty raw");    
+    for (i = 0; i < MAXPW; i++) {    
+        ch = getch();
+
+        if(ch == ENTER || ch == TAB) {
+            senha[i] = '\0';
+            break;
+        } else if (ch == BKSP) {
+            i--;
+            printf("\b \b");
+        } else {
+            senha[i] = ch;
+            printf("* \b");
+        }
+    }
+    system ("/bin/stty cooked");    
+    
     fp = fopen(NOME_ARQ_USUARIO, "rb");
 
     if (fp == NULL) {
@@ -85,6 +116,7 @@ int checar_usuario() {
         fread(&usuario, sizeof(Usuario), 1, fp);
         if (strncmp(&usuario.login[0], login, MAXLOGIN) == 0) {
             if (strncmp(&usuario.senha[0], senha, MAXPW) == 0) {
+                printf("\nAviso: autenticacao realizada com sucesso.\n");
                 return 1;
             }
         }
