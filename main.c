@@ -6,11 +6,13 @@
 
 #include "paciente.h"
 #include "login.h"
- 
-#define SELECT_MARK "*"
+
+#define WARN_MARK "#" 
+#define ENTER_MARK "*"
 
 int print_menu_paciente() {
   int op; 
+
   printf("|--------------------------------------------------------------|\n");
   printf("|      CADASTRO PACIENTES DIAGNOSTICADOS COM SARS-COV-2        |\n");
   printf("|--------------------------------------------------------------|\n");
@@ -22,37 +24,37 @@ int print_menu_paciente() {
   printf("|______________________________________________________________|\n");
 
             
-  
-  printf("\n%s Selecione uma opcao: ", SELECT_MARK);
-  scanf("%d", &op);
+  printf("%s Selecione uma opcao: ", ENTER_MARK);
+  scanf("%i", &op);
 
   return op;
 }
 
 void menu_pacientes(){
         Paciente paciente;
-        int op=-1;
+        int op=-1, ok=0;
         
         do{
            op =print_menu_paciente();
             switch(op){
                 case 1:
-                    printf("\n\t  >> Opcao selecionada: 1 - Novo Cadastro");
-                    gravar_paciente();
+                  printf("%s%s Novo Cadastro\n", WARN_MARK, WARN_MARK);
+                  gravar_paciente();
+                  ok = 1;
                 break;
-                case 2:
-                    flush_buffer();                    
+                case 2:                   
                     buscar_paciente(&paciente);
                     printf("Achou o louco do %s com CPF %s\n", paciente.nome, paciente.cpf);
+                    ok = 1;
                 break;
                 case 3:
                     printf("\n\t  >> Opcao selecionada: 3 - Encerrar o Programa");
-                    exit(0);
+                    exit(EXIT_SUCCESS);
                 break;
                 default:
                     printf("\n\n\t  >> Opcao invalida");
             }
-        }while(op != 3);
+        }while(ok == 1);
 }
 
 int print_menu_login () {
@@ -74,38 +76,50 @@ int print_menu_login () {
 }
 
 
-void menu_login(){
+int menu_login(){
         int op=-1, ok=0;
         Usuario usuario;
 
         do {
-          op =print_menu_login();
+          op = print_menu_login();
 
           switch(op){
             case 1:
-              printf("\n\t  >> Opcao 1 - Novo Cadastro");
+              printf("%s Novo Cadastro\n", WARN_MARK);
               registrar_usuario(&usuario);
               ok = 1;
               break;
             case 2:
-              printf("\n\t  >> Opcao 2 - Acesso ao menu");
-              printf("\n\t  >> Realizar login: \n");
-              checar_usuario();
+              printf("%s Acesso ao menu\n", WARN_MARK);
+              printf("\t%s Realizar login: \n", WARN_MARK);
+              return checar_usuario();
+              ok = 1;
               break;
             case 3:
-              printf("\n\t  >> Opcao 3 - Encerrar o Programa");
-              exit(0);
+              printf("%s Encerrando o program, gracas a Deus\n", WARN_MARK);
+              ok = 1;
               break;
               default:
-              printf("\n\t  >> Opcao invalida");
+                fprintf(stderr, "FATAL: Opcao %d invalida\n", op);
+                exit(EXIT_FAILURE);
               break;
             }
         } while(ok != 1);
+
+   return 0;
 }
 
 int main(int argc, char**argv) {
-	//menu_login();
+  int ok=0;
+  
+  ok = menu_login();
 
-  menu_pacientes();
+  if (ok) {
+    menu_pacientes();
+  } else {
+    fprintf(stderr, "Voce nao tem permissao para acessar o menu dos pacientes, cai fora!!!\n");
+    return EXIT_FAILURE;
+  }
 
+  return EXIT_SUCCESS;
 }
