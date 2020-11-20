@@ -257,6 +257,10 @@ void gravar_paciente() {
         }
     }
     paciente.aniversario.mes = atoi(numstr);
+    if (paciente.aniversario.mes<1 || paciente.aniversario.mes>31) {
+        fprintf(stderr, "Voce ja viu mes com mais de 31 dias, seu tonto?\n");
+        goto nascimento_mes_label;
+    }
 
     nascimento_ano_label:
     printf("%s Ano: ", ENTER_MARK);
@@ -310,6 +314,10 @@ void gravar_paciente() {
         }
     }
     paciente.diagnostico.mes = atoi(numstr);
+    if (paciente.diagnostico.mes<1 || paciente.diagnostico.mes>31) {
+        fprintf(stderr, "Voce ja viu mes com mais de 31 dias, seu tonto?\n");
+        goto diagnostico_mes_label;
+    }
 
     diagnostico_ano_label:
     printf("%s Ano: ", ENTER_MARK);
