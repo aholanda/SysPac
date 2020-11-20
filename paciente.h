@@ -10,6 +10,8 @@
 #define TAMFONE 16
 #define TAMNUM 16
 
+#define MAXCOMORBS 256
+
 typedef struct endereco_struct {
     char logradouro[MAXNOME];
     int numero;
@@ -26,8 +28,6 @@ typedef struct data_struct {
     int ano;
 } Data;
 
-enum comorbidade_enum {DIABETES=0, OBESIDADE, HIPERTENSAO, TUBERCULOSE};
-
    typedef struct paciente_struct {
     char nome[MAXNOME];
     char cpf[TAMCPF];
@@ -36,10 +36,11 @@ enum comorbidade_enum {DIABETES=0, OBESIDADE, HIPERTENSAO, TUBERCULOSE};
     Endereco endereco;
     Data aniversario;
     Data diagnostico;
-    int comorbidades[4];
+    char comorbs[MAXCOMORBS]; /* comorbidades */
 } Paciente;
 
 
 extern void gravar_paciente();
-extern void buscar_paciente(Paciente *p, char *cpf);
+extern void buscar_paciente(Paciente *p);
+extern void print_paciente(Paciente *p);
 #endif // PACIENTE_H

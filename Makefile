@@ -1,7 +1,7 @@
 CFLAGS := -Wall -g
 
-syspac.exe: main.c login.c paciente.c
+syspac.exe: main.c login.c paciente.c io.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	$(RM) *.o *.exe
+	$(RM) *.o *.exe *.bin risco.txt

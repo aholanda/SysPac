@@ -1,13 +1,13 @@
 #ifndef LOGIN_H_INCLUDED
 #define LOGIN_H_INCLUDED
 
-#define TAMLOGIN 32
-#define TAMSENHA 32
+#define MAXLOGIN 32
+#define MAXPW 32
 #define NOME_ARQ_USUARIO "usuario.bin"
 
 typedef struct usuario_struct {
-    char login[TAMLOGIN];
-    char senha[TAMSENHA];
+    char login[MAXLOGIN];
+    char senha[MAXPW];
 } Usuario;
 
 extern int checar_usuario();

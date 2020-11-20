@@ -28,3 +28,46 @@
 
 1605450862 source:c:\users\win 10\desktop\untitled1.c
 
+1605836184 source:/home/ajh/SysPac/io.c
+	<stdio.h>
+	<termios.h>
+	<unistd.h>
+
+1605834577 source:/home/ajh/SysPac/login.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	"login.h"
+	"io.h"
+
+1605825059 /home/ajh/SysPac/login.h
+
+1605836194 /home/ajh/SysPac/io.h
+	<conio.h>
+	<stdio.h>
+
+1605835628 source:/home/ajh/SysPac/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<unistd.h>
+	"paciente.h"
+	"login.h"
+	"io.h"
+
+1605832203 /home/ajh/SysPac/paciente.h
+
+1605836266 source:/home/ajh/SysPac/paciente.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<ctype.h>
+	<time.h>
+	<unistd.h>
+	<termios.h>
+	"paciente.h"
+	"login.h"
+	"io.h"
+
