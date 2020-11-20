@@ -18,3 +18,4 @@ int getch() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldtc);
     return ch;
 }
+

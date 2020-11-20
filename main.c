@@ -35,20 +35,20 @@ int print_menu_paciente() {
 
 void menu_pacientes(){
         Paciente paciente;
-        int op=-1, ok=0;
+        int op=-1;
 
         do{
-           op =print_menu_paciente();
+           label_menu_paciente:
+           op = print_menu_paciente();
             switch(op){
                 case 1:
                   printf("%s%s Novo Cadastro\n", WARN_MARK, WARN_MARK);
                   gravar_paciente();
-                  ok = 1;
+                  goto label_menu_paciente;
                 break;
                 case 2:
                     buscar_paciente(&paciente);
                     printf("Achou o louco do %s com CPF %s\n", paciente.nome, paciente.cpf);
-                    ok = 1;
                 break;
                 case 3:
                     printf("\n\t  >> Opcao selecionada: 3 - Encerrar o Programa");
@@ -56,8 +56,10 @@ void menu_pacientes(){
                 break;
                 default:
                     printf("\n\n\t  >> Opcao invalida");
+                    goto label_menu_paciente;
+                break;
             }
-        }while(ok == 1);
+        } while(op == 3);
 }
 
 int print_menu_login () {

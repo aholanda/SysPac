@@ -371,7 +371,7 @@ void gravar_paciente() {
 
     __gravar_paciente(&paciente);
     checar_grupo_risco(&paciente);
-    exit(EXIT_SUCCESS);
+    return;
 }
 
  void print_paciente(Paciente *p) {

@@ -28,12 +28,12 @@
 
 1605450862 source:c:\users\win 10\desktop\untitled1.c
 
-1605825058 source:/home/ajh/SysPac/io.c
+1605836184 source:/home/ajh/SysPac/io.c
 	<stdio.h>
 	<termios.h>
 	<unistd.h>
 
-1605833575 source:/home/ajh/SysPac/login.c
+1605834577 source:/home/ajh/SysPac/login.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -43,11 +43,11 @@
 
 1605825059 /home/ajh/SysPac/login.h
 
-1605834325 /home/ajh/SysPac/io.h
+1605836194 /home/ajh/SysPac/io.h
 	<conio.h>
 	<stdio.h>
 
-1605834307 source:/home/ajh/SysPac/main.c
+1605835628 source:/home/ajh/SysPac/main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -59,7 +59,7 @@
 
 1605832203 /home/ajh/SysPac/paciente.h
 
-1605834311 source:/home/ajh/SysPac/paciente.c
+1605836266 source:/home/ajh/SysPac/paciente.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
