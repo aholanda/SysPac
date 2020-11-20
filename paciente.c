@@ -4,7 +4,13 @@
 #include <ctype.h>
 #include <time.h>
 #include <unistd.h>
+
+
+#ifdef LINUX
 #include <termios.h>
+#else
+#include <conio.h>
+#endif
 
 #include "paciente.h"
 #include "login.h"

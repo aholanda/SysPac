@@ -2,7 +2,7 @@
 #define IO_H_INCLUDED
 
 #ifdef _WIN32
-#include <conio.h>
+#define clrscr() system("cls")
 #else
 #include <stdio.h>
 #define clrscr() printf("\e[1;1H\e[2J")
