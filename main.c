@@ -7,11 +7,11 @@
 #include "paciente.h"
 #include "login.h"
 
-#define WARN_MARK "#" 
+#define WARN_MARK "#"
 #define ENTER_MARK "*"
 
 int print_menu_paciente() {
-  int op; 
+  int op;
 
   printf("|--------------------------------------------------------------|\n");
   printf("|      CADASTRO PACIENTES DIAGNOSTICADOS COM SARS-COV-2        |\n");
@@ -23,9 +23,9 @@ int print_menu_paciente() {
   printf("|                                                              |\n");
   printf("|______________________________________________________________|\n");
 
-            
+
   printf("%s Selecione uma opcao: ", ENTER_MARK);
-  scanf("%i", &op);
+  (void)scanf("%i", &op);
 
   return op;
 }
@@ -33,7 +33,7 @@ int print_menu_paciente() {
 void menu_pacientes(){
         Paciente paciente;
         int op=-1, ok=0;
-        
+
         do{
            op =print_menu_paciente();
             switch(op){
@@ -42,7 +42,7 @@ void menu_pacientes(){
                   gravar_paciente();
                   ok = 1;
                 break;
-                case 2:                   
+                case 2:
                     buscar_paciente(&paciente);
                     printf("Achou o louco do %s com CPF %s\n", paciente.nome, paciente.cpf);
                     ok = 1;
@@ -87,7 +87,6 @@ int menu_login(){
             case 1:
               printf("%s Novo Cadastro\n", WARN_MARK);
               registrar_usuario(&usuario);
-              ok = 1;
               break;
             case 2:
               printf("%s Acesso ao menu\n", WARN_MARK);
@@ -111,7 +110,7 @@ int menu_login(){
 
 int main(int argc, char**argv) {
   int ok=0;
-  
+
   ok = menu_login();
 
   if (ok) {

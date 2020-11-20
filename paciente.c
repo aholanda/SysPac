@@ -30,9 +30,9 @@ static void __gravar_paciente(Paciente *paciente) {
 void checar_grupo_risco(Paciente *paciente) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
-    int idade = 1900 +  tm.tm_year;
-    int dif = idade - paciente->aniversario.ano;
-    
+    int ano_atual = 1900 +  tm.tm_year;
+    int dif = ano_atual - paciente->aniversario.ano;
+
     if (dif > 65) {
         printf("Cuidado veio, voce tem %d, fica na goma\n", dif);
         FILE *fp = fopen(NOME_ARQ_RISCO, "aw");
@@ -40,14 +40,14 @@ void checar_grupo_risco(Paciente *paciente) {
             fprintf(stderr, "Erro ao abrir %s para escrita\n", NOME_ARQ_RISCO);
             exit(EXIT_FAILURE);
         }
-        fprintf(fp, "%s;%d\n", paciente->endereco.cep, idade);
+        fprintf(fp, "%s;%d\n", paciente->endereco.cep, dif);
         fclose(fp);
     }
 }
 
 void gravar_paciente() {
     Paciente paciente;
-    char numstr[TAMNUM];
+    char numstr[TAMNUM], *com, ch;
     int i;
 
     printf("|--------------------------------------------------------------------------|\n");
@@ -55,12 +55,12 @@ void gravar_paciente() {
     printf("|--------------------------------------------------------------------------|\n");
 
     printf("%s Dados do paciente: \n", INIT_MARK);
-            
+
     /* NOME */
     nome_label:
     flush_buffer();
     printf("%s Nome: ", ENTER_MARK);
-    fflush(stdin);            
+    fflush(stdin);
     for (i = 0; i < MAXNOME; i++) {
         paciente.nome[i] = getc(stdin);
         if (paciente.nome[i] == '\n') {
@@ -73,7 +73,7 @@ void gravar_paciente() {
             goto nome_label;
         }
     }
-    
+
     /* CPF */
     cpf_label:
     printf("%s CPF: ", ENTER_MARK);
@@ -121,7 +121,7 @@ void gravar_paciente() {
     logradouro_label:
     printf("%s Endereco do Paciente \n", INIT_MARK);
     printf("%s Logradouro: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < MAXNOME; i++) {
         paciente.endereco.logradouro[i] = getc(stdin);
         if (paciente.endereco.logradouro[i] == '\n') {
@@ -137,7 +137,7 @@ void gravar_paciente() {
 
     numero_label:
     printf("%s Numero: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < TAMNUM; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -154,7 +154,7 @@ void gravar_paciente() {
 
     /* COMPLEMENTO */
     printf("%s Complemento: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < MAXNOME; i++) {
         paciente.endereco.complemento[i] = getc(stdin);
         if (paciente.endereco.complemento[i] == '\n') {
@@ -162,29 +162,10 @@ void gravar_paciente() {
             break;
         }
     }
- 
-    /* CEP */
-    cep_label:
-    printf("%s CEP: ", ENTER_MARK);
-    fflush(stdin);        
-    for (i = 0; i < TAMCEP; i++) {
-        paciente.endereco.cep[i] = getc(stdin);
-        if (paciente.endereco.cep[i] == '\n') {
-            paciente.endereco.cep[i] = '\0';
-            break;
-        }
-        if (isdigit(paciente.endereco.cep[i]) || (paciente.endereco.cep[i] == '-')) {
-            continue;
-        } else {
-            printf("soh numeros %c e \"-\" nao permitidos\n", paciente.endereco.cep[i]);
-            flush_buffer();
-            goto cep_label;
-        }
-    }
 
     //bairro_label:
     printf("%s Bairro: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < MAXNOME; i++) {
         paciente.endereco.bairro[i] = getc(stdin);
         if (paciente.endereco.bairro[i] == '\n') {
@@ -192,10 +173,10 @@ void gravar_paciente() {
             break;
         }
     }
-    
-    //cidade_label:    
+
+    //cidade_label:
     printf("%s Cidade: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < MAXNOME; i++) {
         paciente.endereco.cidade[i] = getc(stdin);
         if (paciente.endereco.cidade[i] == '\n') {
@@ -203,10 +184,10 @@ void gravar_paciente() {
             break;
         }
     }
-            
+
     estado_label:
     printf("%s Estado: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < MAXNOME; i++) {
         paciente.endereco.estado[i] = getc(stdin);
         if (paciente.endereco.estado[i] == '\n') {
@@ -220,10 +201,28 @@ void gravar_paciente() {
         }
     }
 
-    printf("%s Data de nascimento\n", INIT_MARK);       
+     /* CEP */
+    cep_label:
+    printf("Aviso: Insira somente numeros, seu mala!\n");
+    printf("%s CEP: ", ENTER_MARK);
+    fflush(stdin);
+    for (i = 0; i < TAMCEP; i++) {
+        paciente.endereco.cep[i] = getc(stdin);
+        if (paciente.endereco.cep[i] == '\n') {
+            paciente.endereco.cep[i] = '\0';
+            break;
+        }
+        if (!isdigit(paciente.endereco.cep[i])) {
+            printf("soh numeros sao permitidos\n", paciente.endereco.cep[i]);
+            flush_buffer();
+            goto cep_label;
+        }
+    }
+
+    printf("%s Data de nascimento\n", INIT_MARK);
     nascimento_dia_label:
     printf("%s Dia: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -240,7 +239,7 @@ void gravar_paciente() {
 
     nascimento_mes_label:
     printf("%s Mes: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -257,7 +256,7 @@ void gravar_paciente() {
 
     nascimento_ano_label:
     printf("%s Ano: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < 5; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -275,7 +274,7 @@ void gravar_paciente() {
     printf("%s Data do diagnostico\n", INIT_MARK);
     diagnostico_dia_label:
     printf("%s Dia: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -292,7 +291,7 @@ void gravar_paciente() {
 
     diagnostico_mes_label:
     printf("%s Mes: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < 3; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -309,7 +308,7 @@ void gravar_paciente() {
 
     diagnostico_ano_label:
     printf("%s Ano: ", ENTER_MARK);
-    fflush(stdin);        
+    fflush(stdin);
     for (i = 0; i < 5; i++) {
         numstr[i] = getc(stdin);
         if (numstr[i] == '\n') {
@@ -323,6 +322,48 @@ void gravar_paciente() {
         }
     }
     paciente.diagnostico.ano = atoi(numstr);
+
+    /* COMORBIDADES */
+    printf("%s Possui as seguintes comorbidades\n", "#");
+    com = "\tDiabetes\n";
+    label_diabetes:
+    printf("%s %s (s/n)? ", ENTER_MARK, com);
+    scanf("%c", &ch);
+    if (ch == 's') {
+        strncpy(&paciente.comorbs, com, MAXCOMORBS);
+    } else if (ch != 'n') {
+        goto label_diabetes;
+    } else {}
+
+    com = "\tHipertensao\n";
+    label_hipertensao:
+    printf("%s %s (s/n)? ", ENTER_MARK, com);
+    scanf("%c", &ch);
+    if (ch == 's') {
+        strncat(&paciente.comorbs, com, MAXCOMORBS);
+    } else if (ch != 'n') {
+        goto label_hipertensao;
+    } else {}
+
+    com = "\tObesidade\n";
+    label_obesidade:
+    printf("%s %s (s/n)? ", ENTER_MARK, com);
+    scanf("%c", &ch);
+    if (ch == 's') {
+        strncat(&paciente.comorbs, com, MAXCOMORBS);
+    } else if (ch != 'n') {
+        goto label_obesidade;
+    } else {}
+
+    com = "\tTuberculose\n";
+    label_tuberculose:
+    printf("%s %s (s/n)? ", ENTER_MARK, com);
+    scanf("%c", &ch);
+    if (ch == 's') {
+        strncat(&paciente.comorbs, com, MAXCOMORBS);
+    } else if (ch != 'n') {
+        goto label_tuberculose;
+    } else {}
 
     __gravar_paciente(&paciente);
     checar_grupo_risco(&paciente);
@@ -341,14 +382,18 @@ void gravar_paciente() {
     printf("Bairro: %s\n", p->endereco.bairro);
     printf("Cidade: %s\n", p->endereco.cidade);
     printf("Estado: %s\n", p->endereco.estado);
-    printf("Nascimento: %d/%d/%d\n", 
-            p->aniversario.dia, 
-            p->aniversario.mes, 
+    printf("CEP: %s\n", p->endereco.cep);
+    printf("Nascimento: %d/%d/%d\n",
+            p->aniversario.dia,
+            p->aniversario.mes,
             p->aniversario.ano);
-    printf("Data diagnostica: %d/%d/%d\n", 
-            p->diagnostico.dia, 
-            p->diagnostico.mes, 
+    printf("Data diagnostica: %d/%d/%d\n",
+            p->diagnostico.dia,
+            p->diagnostico.mes,
             p->diagnostico.ano);
+
+    printf("Comorbidades:\n");
+    printf("%s", p->comorbs);
 }
 
 void buscar_paciente(Paciente *p) {
@@ -362,7 +407,7 @@ void buscar_paciente(Paciente *p) {
     fflush(stdin);
     for (i = 0; i < TAMCPF; i++) {
         cpf[i] = getc(stdin);
-        
+
         if (cpf[i] == '\n' || cpf[i]== '\t') {
             cpf[i] = '\0';
             break;

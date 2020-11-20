@@ -25,6 +25,8 @@ static void __registrar_usuario(Usuario *usuario) {
     }
     fwrite(usuario, sizeof(Usuario), 1, fp);
     fclose(fp);
+
+    printf("\nLEGAL: Usuario cadastrado com sucesso!\n");
 }
 
 void registrar_usuario(Usuario *usuario) {
@@ -45,8 +47,8 @@ void registrar_usuario(Usuario *usuario) {
 
     printf("%s Senha: ", ENTER_MARK);
     fflush(stdin);
-    system ("/bin/stty raw");    
-    for (i = 0; i < MAXPW; i++) {    
+    system ("/bin/stty raw");
+    for (i = 0; i < MAXPW; i++) {
         ch = getch();
 
         if(ch == ENTER || ch == TAB) {
@@ -60,9 +62,7 @@ void registrar_usuario(Usuario *usuario) {
             printf("* \b");
         }
     }
-    system ("/bin/stty cooked");    
-    
-    printf("\n%s\n", usuario->senha);
+    system ("/bin/stty cooked");
 
     __registrar_usuario(usuario);
 }
@@ -72,8 +72,8 @@ int checar_usuario() {
     char ch, login[MAXLOGIN];
     char senha[MAXPW];
     Usuario usuario;
-    int i;
-  
+    int i, ret;
+
     flush_buffer();
     printf("%s Autenticacao do usuario:\n", WARN_MARK);
     printf("%s Login: ", ENTER_MARK);
@@ -88,8 +88,8 @@ int checar_usuario() {
 
     printf("%s Senha: ", ENTER_MARK);
     fflush(stdin);
-    system ("/bin/stty raw");    
-    for (i = 0; i < MAXPW; i++) {    
+    system ("/bin/stty raw");
+    for (i = 0; i < MAXPW; i++) {
         ch = getch();
 
         if(ch == ENTER || ch == TAB) {
@@ -103,8 +103,8 @@ int checar_usuario() {
             printf("* \b");
         }
     }
-    system ("/bin/stty cooked");    
-    
+    system ("/bin/stty cooked");
+
     fp = fopen(NOME_ARQ_USUARIO, "rb");
 
     if (fp == NULL) {
@@ -113,7 +113,12 @@ int checar_usuario() {
     }
 
     while (!feof(fp)) {
-        fread(&usuario, sizeof(Usuario), 1, fp);
+        ret = (int)fread(&usuario, sizeof(Usuario), 1, fp);
+        if (ret == 0) {
+            fprintf(stderr, "FATAL: Erro durante a leitura do login no arquivo %s\n", NOME_ARQ_USUARIO);
+            exit(EXIT_FAILURE);
+        }
+
         if (strncmp(&usuario.login[0], login, MAXLOGIN) == 0) {
             if (strncmp(&usuario.senha[0], senha, MAXPW) == 0) {
                 printf("\nAviso: autenticacao realizada com sucesso.\n");
