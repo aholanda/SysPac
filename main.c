@@ -6,13 +6,16 @@
 
 #include "paciente.h"
 #include "login.h"
+#include "io.h"
 
 #define WARN_MARK "#"
 #define ENTER_MARK "*"
 
+
 int print_menu_paciente() {
   int op;
 
+  clrscr();
   printf("|--------------------------------------------------------------|\n");
   printf("|      CADASTRO PACIENTES DIAGNOSTICADOS COM SARS-COV-2        |\n");
   printf("|--------------------------------------------------------------|\n");
@@ -60,6 +63,7 @@ void menu_pacientes(){
 int print_menu_login () {
   int op;
 
+  clrscr();
   printf("|---------------------------------------------------------------------|\n");
   printf("|       SISTEMA CADASTRO COVID-19                                     |\n");
   printf("|---------------------------------------------------------------------|\n");
@@ -116,7 +120,7 @@ int main(int argc, char**argv) {
   if (ok) {
     menu_pacientes();
   } else {
-    fprintf(stderr, "Voce nao tem permissao para acessar o menu dos pacientes, cai fora!!!\n");
+    fprintf(stderr, "Voce nao tem permissao para acessar o menu dos pacientes, por favor cadastre um usuário e senha!!!\n");
     return EXIT_FAILURE;
   }
 

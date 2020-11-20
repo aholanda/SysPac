@@ -14,6 +14,8 @@
 #define TAB 9
 #define BKSP 8 /* espaco */
 
+
+
 static void __registrar_usuario(Usuario *usuario) {
     FILE *fp;
 
@@ -33,8 +35,17 @@ void registrar_usuario(Usuario *usuario) {
     int i;
     char ch;
 
-    flush_buffer();
+
+    clrscr();
+    printf("|--------------------------------------------------------------------------|\n");
+    printf("|                            REGISTRAR USUÁRIO E SENHA                     |\n");
+    printf("|--------------------------------------------------------------------------|\n");
+    printf("| Atenção! Memorize o seu login e senha para futuros acessos ao sistema.   |\n");
+    printf("|                                                                          |\n");
+    printf("|--------------------------------------------------------------------------|\n");
     printf("%s Registrar usuario:\n", WARN_MARK);
+
+    flush_buffer();
     printf("%s Login: ", ENTER_MARK);
     fflush(stdin);
     for (i = 0; i < MAXLOGIN; i++) {
@@ -74,6 +85,10 @@ int checar_usuario() {
     Usuario usuario;
     int i, ret;
 
+    clrscr();
+    printf("|--------------------------------------------------------------------------|\n");
+    printf("|                       ACESSO AO SISTEMA DE CADASTRO                      |\n");
+    printf("|--------------------------------------------------------------------------|\n");
     flush_buffer();
     printf("%s Autenticacao do usuario:\n", WARN_MARK);
     printf("%s Login: ", ENTER_MARK);

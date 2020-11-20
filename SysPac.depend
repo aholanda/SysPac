@@ -33,7 +33,7 @@
 	<termios.h>
 	<unistd.h>
 
-1605825759 source:/home/ajh/SysPac/login.c
+1605833575 source:/home/ajh/SysPac/login.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -43,9 +43,11 @@
 
 1605825059 /home/ajh/SysPac/login.h
 
-1605825058 /home/ajh/SysPac/io.h
+1605834325 /home/ajh/SysPac/io.h
+	<conio.h>
+	<stdio.h>
 
-1605826321 source:/home/ajh/SysPac/main.c
+1605834307 source:/home/ajh/SysPac/main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -53,10 +55,11 @@
 	<unistd.h>
 	"paciente.h"
 	"login.h"
+	"io.h"
 
-1605680754 /home/ajh/SysPac/paciente.h
+1605832203 /home/ajh/SysPac/paciente.h
 
-1605825059 source:/home/ajh/SysPac/paciente.c
+1605834311 source:/home/ajh/SysPac/paciente.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
