@@ -1,12 +1,20 @@
 #include <stdio.h>
-#include <termios.h>
+
 #include <unistd.h>
+
+#ifdef LINUX
+#include <termios.h>
+#else
+#include <conio.h>
+#endif
+
 
 void flush_buffer() {
     char ch;
     while ((ch = getchar() != '\n') && (ch != EOF));
 }
 
+#ifdef LINUX
 int getch() {
     struct termios oldtc, newtc;
     int ch;
@@ -18,4 +26,4 @@ int getch() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldtc);
     return ch;
 }
-
+#endif
